@@ -411,3 +411,6 @@ Sources/BUSMASTER/Application/BUSMASTER.tlb
 Sources/BUSMASTER/Application/SimulatedSystems/OBJ/
 Sources/BUSMASTER/Application/SimulatedSystems/include/*.o
 Sources/BUSMASTER/Application/SimulatedSystems/include/*.a
+
+# Local settings of Claude Code
+/.claude/
