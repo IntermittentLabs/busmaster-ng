@@ -72,6 +72,13 @@ The release notes, change log and read-me of the original BUSMASTER up to v3.2.x
 - The release packages are built on **GitHub Actions** from the tagged sources, the **IXXAT VCI** driver included.
 - The Message window and Signal Watch show the **value descriptions** of CAN signals again
   (`Position control` instead of `3`), lost since BUSMASTER 3.0.
+- Message window: a **Frequency (Hz)** column, a list that can be sorted while the bus is connected, and messages
+  that stop arriving turn grey. Transmit window: repetition times that follow the clock (1 ms on Windows 10 1803 or
+  later and Windows 11) and a Frequency (Hz) column.
+- **Hardware selection** readable at high display scale, with a baud rate list that remembers the last speed.
+- A new open source **PEAK PCAN-Basic** CAN driver, with a listen-only mode; the old PEAK driver stays as
+  *PEAK USB (Legacy)*.
+- **Help → Check for Updates** installs a newer version from inside the program (see Privacy below).
 
 ## Known limitations
 

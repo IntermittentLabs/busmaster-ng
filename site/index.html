@@ -111,7 +111,7 @@
     <p>Drivers for the interfaces supported by the original BUSMASTER are included; the vendor driver is installed
       separately. A free <strong>Simulation</strong> driver needs no hardware at all.</p>
     <div class="chips">
-      <span>PEAK</span><span>Vector XL</span><span>Kvaser</span><span>ETAS BOA</span><span>IXXAT VCI</span>
+      <span>PEAK PCAN-Basic</span><span>PEAK USB (Legacy)</span><span>Vector XL</span><span>Kvaser</span><span>ETAS BOA</span><span>IXXAT VCI</span>
       <span>MHS</span><span>VScom</span><span>Intrepid neoVI</span><span>NSI</span><span>i-VIEW</span>
       <span>ISOLAR-EVE</span>
     </div>
@@ -123,6 +123,13 @@
       <li>Built with Visual Studio 2022; runs on Windows 7 to 11.</li>
       <li>DBC databases load directly (<em>CAN &rarr; Load DBC</em>), and the DBC &harr; DBF converters are fixed.</li>
       <li>Message window and Signal Watch show value descriptions of signals again.</li>
+      <li>Message window: a <em>Frequency (Hz)</em> column, a list you can sort while the bus is connected, and messages
+        that stop arriving turn grey.</li>
+      <li>Transmit window: repetition times that follow the clock (down to 1 ms on Windows 10 / 11), and a
+        <em>Frequency (Hz)</em> column.</li>
+      <li>Hardware selection with a baud rate list that remembers your last speed, readable at high display scale.</li>
+      <li>A new open source <strong>PEAK PCAN-Basic</strong> driver, with a listen-only mode to watch a bus.</li>
+      <li><em>Help &rarr; Check for Updates</em> installs a newer version from inside the program.</li>
       <li>Settings kept apart from earlier versions: install it next to BUSMASTER 3.2.2.</li>
       <li>Configurations of BUSMASTER 3.2.x open unchanged.</li>
     </ul>
@@ -150,9 +157,9 @@
     </details>
     <details class="faq">
       <summary>Which CAN and LIN interfaces are supported?</summary>
-      <p>PEAK, Vector XL, Kvaser, ETAS BOA, IXXAT VCI, MHS, VScom, Intrepid neoVI, NSI, i-VIEW and ISOLAR-EVE, like
-        the original BUSMASTER. Install the driver of your interface from its manufacturer. The Simulation driver
-        works without hardware.</p>
+      <p>PEAK (the new PCAN-Basic driver, and the old one as PEAK USB Legacy), Vector XL, Kvaser, ETAS BOA, IXXAT VCI,
+        MHS, VScom, Intrepid neoVI, NSI, i-VIEW and ISOLAR-EVE, like the original BUSMASTER. Install the driver of
+        your interface from its manufacturer. The Simulation driver works without hardware.</p>
     </details>
     <details class="faq">
       <summary>Can I install it next to BUSMASTER 3.2.2?</summary>
@@ -164,6 +171,13 @@
       <p>Yes. BUSMASTER-NG is free and open source under the GNU LGPL v3, like the original: you can use it at
         home or in a company at no cost. If you distribute a modified version, share your changes under the same
         license.</p>
+    </details>
+    <details class="faq">
+      <summary>Does BUSMASTER-NG send information to the internet?</summary>
+      <p>No telemetry. The only connection is the update check: <em>Help &rarr; Check for Updates</em> asks GitHub
+        for the latest release when you click it, and <em>Check at Startup</em> (off unless you turn it on) does it
+        every time the program starts. Nothing is downloaded without your choice, and the installer is checked
+        against the SHA-256 that GitHub gives for it.</p>
     </details>
     <details class="faq">
       <summary>Does it run on Linux or macOS?</summary>
