@@ -68,7 +68,8 @@ CIxxatCanChannel::CIxxatCanChannel(void)
     m_bRxThreadRunning = FALSE;
     m_lMustQuit = 0;
 
-    m_dwTimerTickResolutionNSec = 0;
+    m_dwTscDivisor = 1;
+    m_dwClockFreq = 1000000;
     m_qwTimerOverruns = 0;
 
     m_dwRxErrorFrameCounter = 0;
@@ -531,20 +532,17 @@ HRESULT CIxxatCanChannel::CreateCANChannel()
                 if (  (sCanCapabilities.dwTscDivisor != 0)
                         && (sCanCapabilities.dwClockFreq > 0) )
                 {
-                    // use a UINT64 to be sure to have enough place to
-                    // store the values
-                    UINT64 qwTimerRes   =  1000000000 * (UINT64) sCanCapabilities.dwTscDivisor;
-
-                    // calculate now the timer resolution in 1 nSecond ticks
-                    m_dwTimerTickResolutionNSec = DWORD(qwTimerRes / sCanCapabilities.dwClockFreq);
+                    m_dwTscDivisor = sCanCapabilities.dwTscDivisor;
+                    m_dwClockFreq = sCanCapabilities.dwClockFreq;
                 }
                 else
                 {
-                    //TODO: what to do in release mode
 #ifdef _DEBUG
                     ASSERT(false);
 #endif
-                    m_dwTimerTickResolutionNSec = sCanCapabilities.dwClockFreq;
+                    // no usable values from the interface: assume a counter of 1 microsecond
+                    m_dwTscDivisor = 1;
+                    m_dwClockFreq = 1000000;
                 }
             }
             //
@@ -703,6 +701,16 @@ void CIxxatCanChannel::DispatchFrameToClients(STCANDATA* pStCanData)
     }
 }
 
+/**
+ * BUSMASTER-NG: time stamp of a message in units of 0.1 ms, from the ticks of the interface counter plus its overruns,
+ * computed as ticks * divisor * 10000 / clock in two steps, so that nothing is lost and 64 bits are enough for years.
+ */
+LONGLONG CIxxatCanChannel::llTicksTo01ms(DWORD dwTime) const
+{
+    UINT64 qwUnits = ((UINT64)dwTime + m_qwTimerOverruns) * m_dwTscDivisor;  // in 1 / m_dwClockFreq seconds
+    return (LONGLONG)((qwUnits / m_dwClockFreq) * 10000 + ((qwUnits % m_dwClockFreq) * 10000) / m_dwClockFreq);
+}
+
 
 /**
  * @brief
@@ -732,11 +740,7 @@ void CIxxatCanChannel::ConvertIxxatCanToBusmasterMsg(CANMSG* pCanMsg, STCANDATA*
     pStCanData->m_uDataInfo.m_sCANMsg.m_bCANFD = false;
     pStCanData->m_uDataInfo.m_sCANMsg.m_ucChannel = m_byChannelNumber;
 
-    pStCanData->m_lTickCount.QuadPart = pCanMsg->dwTime + m_qwTimerOverruns;
-    pStCanData->m_lTickCount.QuadPart *= m_dwTimerTickResolutionNSec;
-
-    // change it to a tick with 0.1 milliseconds
-    pStCanData->m_lTickCount.QuadPart /= 100000;
+    pStCanData->m_lTickCount.QuadPart = llTicksTo01ms(pCanMsg->dwTime);
 
     pStCanData->m_uDataInfo.m_sCANMsg.m_unMsgID = pCanMsg->dwMsgId;
     pStCanData->m_uDataInfo.m_sCANMsg.m_ucDataLen = pCanMsg->uMsgInfo.Bits.dlc;
@@ -774,11 +778,7 @@ void CIxxatCanChannel::ConvertIxxatErrorToBusmasterMsg(CANMSG* pCanMsg, STCANDAT
 
     pStCanData->m_uDataInfo.m_sErrInfo.m_ucChannel = m_byChannelNumber;
 
-    pStCanData->m_lTickCount.QuadPart = pCanMsg->dwTime + m_qwTimerOverruns;
-    pStCanData->m_lTickCount.QuadPart *= m_dwTimerTickResolutionNSec;
-
-    // change it to a tick with 0.1 milliseconds
-    pStCanData->m_lTickCount.QuadPart /= 100000;
+    pStCanData->m_lTickCount.QuadPart = llTicksTo01ms(pCanMsg->dwTime);
 
     pStCanData->m_uDataInfo.m_sErrInfo.m_ucErrType = ERROR_BUS;
 

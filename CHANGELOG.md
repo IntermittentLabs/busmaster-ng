@@ -12,6 +12,11 @@ The history of the original BUSMASTER up to v3.2.x is in [docs/history](docs/his
 - A configuration saved with the *VScom CAN-API*, *i-VIEW* or *ETAS ISOLAR-EVE* driver opened with the Simulation
   driver, because these three names were not recognised when it was loaded. It now opens with its own driver.
 
+**Drivers**
+- IXXAT VCI: the time stamps of the messages ran slow by up to some percent, because the length of a timer tick was
+  cut to whole nanoseconds (27 instead of 27.78 ns with a 36 MHz clock); the error grew with the time since connect.
+  The time is now computed without rounding (from original pull request 1189) *(not tested with an IXXAT interface)*.
+
 ## 3.7.5 "Overdrive" - 2026-11-14
 
 Feature release: a new open source driver for the PEAK-System interfaces, on the PCAN-Basic API.

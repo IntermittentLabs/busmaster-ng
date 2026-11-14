@@ -82,8 +82,12 @@ protected:
     BOOL   m_bRxThreadRunning;    ///< true means that the thread running
     long   m_lMustQuit; ///< Flag to inicate if the thread must quit
 
-    DWORD  m_dwTimerTickResolutionNSec;   ///< The timer tick in nanoseconds
+    // BUSMASTER-NG: one timer tick lasts m_dwTscDivisor / m_dwClockFreq seconds. Kept as a fraction: a tick in whole
+    // nanoseconds (27 instead of 27.78 with a 36 MHz clock) made the time stamps up to some % too short.
+    DWORD  m_dwTscDivisor;    ///< Divisor of the time stamp counter
+    DWORD  m_dwClockFreq;     ///< Clock frequency of the time stamp counter, in Hz
     UINT64 m_qwTimerOverruns; ///< The number of timer overruns since start
+    LONGLONG llTicksTo01ms(DWORD dwTime) const;  ///< Time stamp of a message in units of 0.1 ms
 
 
 
