@@ -6,6 +6,12 @@ All user-visible changes of BUSMASTER-NG, newest first. Numbers like #2 are issu
 
 The history of the original BUSMASTER up to v3.2.x is in [docs/history](docs/history) (ETAS, not changed).
 
+## Unreleased
+
+**Configuration**
+- A configuration saved with the *VScom CAN-API*, *i-VIEW* or *ETAS ISOLAR-EVE* driver opened with the Simulation
+  driver, because these three names were not recognised when it was loaded. It now opens with its own driver.
+
 ## 3.7.5 "Overdrive" - 2026-11-14
 
 Feature release: a new open source driver for the PEAK-System interfaces, on the PCAN-Basic API.

@@ -13927,6 +13927,19 @@ INT CMainFrame::nGetControllerID(std::string strDriverName)
 	{
 		nDriverID = DRIVER_CAN_NSI;
 	}
+    // BUSMASTER-NG: these three were missing, so their configurations opened with the Simulation driver
+    else if (strDriverName == "VScom CAN-API")
+    {
+        nDriverID = DRIVER_CAN_VSCOM;
+    }
+    else if (strDriverName == "i-VIEW")
+    {
+        nDriverID = DRIVER_CAN_IVIEW;
+    }
+    else if (strDriverName == "ETAS ISOLAR-EVE")
+    {
+        nDriverID = DRIVER_CAN_ISOLAR;
+    }
     else
     {
         nDriverID = DRIVER_CAN_STUB;
